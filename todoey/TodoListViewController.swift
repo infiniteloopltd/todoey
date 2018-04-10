@@ -10,7 +10,7 @@ import UIKit
 
 class TodoListViewController: UITableViewController {
 
-    let itemArray = ["itam A","item B","item C"]
+    let itemArray = ["itam A","item B","item C","item D"]
     
     override func viewDidLoad() {
         super.viewDidLoad()
