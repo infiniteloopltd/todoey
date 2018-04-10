@@ -12,7 +12,8 @@ class TodoListViewController: UITableViewController {
 
     var itemArray = ["itam A","item B","item C","item D"]
     
-   
+    var defaults = UserDefaults()
+    
     
     
     override func viewDidLoad() {
