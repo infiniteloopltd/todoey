@@ -12,13 +12,18 @@ class TodoListViewController: UITableViewController {
 
     var itemArray = ["itam A","item B","item C","item D"]
     
-    var defaults = UserDefaults()
+    var defaults = UserDefaults.standard
     
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
+        let savedObject = defaults.object(forKey: "todolist")
+        if (savedObject != nil)
+        {
+            itemArray = savedObject as! [String]
+        }
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -56,6 +61,7 @@ class TodoListViewController: UITableViewController {
       
             print(alertText.text!)
             self.itemArray.append(alertText.text!)
+            self.defaults.set(self.itemArray, forKey: "todolist")
             self.tableView.reloadData()
         }
         
