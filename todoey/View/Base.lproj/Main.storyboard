@@ -9,6 +9,38 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
+        <!--Category Table View Controller-->
+        <scene sceneID="v9G-jn-5t4">
+            <objects>
+                <tableViewController id="trM-xj-j7b" customClass="CategoryTableViewController" customModule="todoey" customModuleProvider="target" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="2vg-Sm-79y">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <prototypes>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="CategoryCell" id="drq-xK-E98">
+                                <rect key="frame" x="0.0" y="28" width="375" height="44"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="drq-xK-E98" id="aFN-RQ-WNV">
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                </tableViewCellContentView>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="trM-xj-j7b" id="neB-dY-1fe"/>
+                            <outlet property="delegate" destination="trM-xj-j7b" id="UD6-jh-tK4"/>
+                        </connections>
+                    </tableView>
+                    <navigationItem key="navigationItem" id="aYX-7I-Tgb"/>
+                    <connections>
+                        <segue destination="fUI-s0-Dvy" kind="show" identifier="goToItems" id="vee-tB-p3U"/>
+                    </connections>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="u6Q-lX-Jb3" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1594" y="115"/>
+        </scene>
         <!--Todoey-->
         <scene sceneID="J9q-C5-u2D">
             <objects>
@@ -51,7 +83,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="DA7-BQ-piQ" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1579.5" y="115.5"/>
+            <point key="canvasLocation" x="2322" y="115"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="PIF-Bx-HLo">
@@ -68,7 +100,7 @@
                     </navigationBar>
                     <nil name="viewControllers"/>
                     <connections>
-                        <segue destination="fUI-s0-Dvy" kind="relationship" relationship="rootViewController" id="xzf-Od-WrM"/>
+                        <segue destination="trM-xj-j7b" kind="relationship" relationship="rootViewController" id="aeX-Ig-4Tn"/>
                     </connections>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Az0-R8-035" userLabel="First Responder" sceneMemberID="firstResponder"/>
