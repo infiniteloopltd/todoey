@@ -12,28 +12,27 @@ class TodoListViewController: UITableViewController {
 
     var itemArray = [ToDoItem]()
     
-    var defaults = UserDefaults.standard
+    var dataFilePath : URL?
+  
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        itemArray.append(ToDoItem(with:"one"))
-        itemArray.append(ToDoItem(with:"two"))
-        itemArray.append(ToDoItem(with:"three"))
-        itemArray.append(ToDoItem(with:"four"))
-        itemArray.append(ToDoItem(with:"five"))
-        itemArray.append(ToDoItem(with:"six"))
-        itemArray.append(ToDoItem(with:"seven"))
-        itemArray.append(ToDoItem(with:"eight"))
-        itemArray.append(ToDoItem(with:"nine"))
-        itemArray.append(ToDoItem(with:"ten"))
-        // Do any additional setup after loading the view, typically from a nib.
-        /*let savedObject = defaults.object(forKey: "todolist")
-        if (savedObject != nil)
+        dataFilePath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.appendingPathComponent("Items.plist")
+        
+        print(dataFilePath!)
+        
+        let decoder = PropertyListDecoder()
+        do
         {
-            itemArray = savedObject as! [String]
-        }*/
+         let data = try Data(contentsOf: dataFilePath!)
+         itemArray = try decoder.decode([ToDoItem].self, from: data)
+        }
+        catch
+        {
+            print("Failed to read back data")
+        }
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -51,10 +50,22 @@ class TodoListViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         print(itemArray[indexPath.row])
         itemArray[indexPath.row].done = !itemArray[indexPath.row].done
+        SaveData()
         tableView.deselectRow(at: indexPath, animated: true)
         tableView.reloadData()
     }
     
+    func SaveData()
+    {
+        let encoder = PropertyListEncoder()
+        do{
+           
+            let data = try encoder.encode(self.itemArray)
+            try data.write(to: self.dataFilePath!)
+        }catch{
+            print("Failed to encode data")
+        }
+    }
     
 
     @IBAction func addButtonPressed(_ sender: UIBarButtonItem) {
@@ -65,9 +76,11 @@ class TodoListViewController: UITableViewController {
         let action = UIAlertAction(title: "Add Item", style: UIAlertActionStyle.default) { (alertAction) in
       
             print(alertText.text!)
-            let newItem = ToDoItem(with: alertText.text!)
+            let newItem = ToDoItem()
+            newItem.title = alertText.text!
             self.itemArray.append(newItem)
-            //self.defaults.set(self.itemArray, forKey: "todolist")
+            self.SaveData()
+            
             self.tableView.reloadData()
         }
         
