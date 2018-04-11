@@ -31,7 +31,10 @@ class TodoListViewController: UITableViewController {
            print("Failed to fetch context")
         }
       
+    
     }
+    
+
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "ToDoItemCell", for: indexPath)
@@ -91,6 +94,21 @@ class TodoListViewController: UITableViewController {
         
         present(alert, animated: true, completion: nil)
         
+    }
+}
+
+extension TodoListViewController: UISearchBarDelegate {
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        print("search button clicked")
+        let request : NSFetchRequest<Item> = Item.fetchRequest()
+        request.predicate = NSPredicate(format: "title CONTAINS[cd] %@", searchBar.text!)
+        request.sortDescriptors = [NSSortDescriptor(key: "title", ascending: true)]
+        do{
+            itemArray = try context.fetch(request)
+        }catch{
+            print("Failed to fetch context")
+        }
+        tableView.reloadData()
     }
 }
 
