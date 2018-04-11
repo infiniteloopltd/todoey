@@ -7,32 +7,30 @@
 //
 
 import UIKit
+import CoreData
 
 class TodoListViewController: UITableViewController {
 
-    var itemArray = [ToDoItem]()
+    var itemArray = [Item]()
     
-    var dataFilePath : URL?
+    
   
-    
+    let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        dataFilePath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.appendingPathComponent("Items.plist")
+        let dataFilePath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first
         
         print(dataFilePath!)
         
-        let decoder = PropertyListDecoder()
-        do
-        {
-         let data = try Data(contentsOf: dataFilePath!)
-         itemArray = try decoder.decode([ToDoItem].self, from: data)
+        let request : NSFetchRequest<Item> = Item.fetchRequest()
+        do{
+            itemArray = try context.fetch(request)
+        }catch{
+           print("Failed to fetch context")
         }
-        catch
-        {
-            print("Failed to read back data")
-        }
+      
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -49,6 +47,7 @@ class TodoListViewController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         print(itemArray[indexPath.row])
+       
         itemArray[indexPath.row].done = !itemArray[indexPath.row].done
         SaveData()
         tableView.deselectRow(at: indexPath, animated: true)
@@ -57,13 +56,12 @@ class TodoListViewController: UITableViewController {
     
     func SaveData()
     {
-        let encoder = PropertyListEncoder()
-        do{
-           
-            let data = try encoder.encode(self.itemArray)
-            try data.write(to: self.dataFilePath!)
-        }catch{
-            print("Failed to encode data")
+        
+        do {
+         try context.save()
+        }
+        catch{
+            print("Failed to save data")
         }
     }
     
@@ -74,10 +72,10 @@ class TodoListViewController: UITableViewController {
         let alert = UIAlertController(title: "Add new Todo ITem", message: "", preferredStyle: .alert)
         
         let action = UIAlertAction(title: "Add Item", style: UIAlertActionStyle.default) { (alertAction) in
-      
             print(alertText.text!)
-            let newItem = ToDoItem()
+            let newItem = Item(context: self.context)
             newItem.title = alertText.text!
+            newItem.done = false
             self.itemArray.append(newItem)
             self.SaveData()
             
