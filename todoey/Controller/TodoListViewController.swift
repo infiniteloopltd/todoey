@@ -24,12 +24,8 @@ class TodoListViewController: UITableViewController {
         
         print(dataFilePath!)
         
-        let request : NSFetchRequest<Item> = Item.fetchRequest()
-        do{
-            itemArray = try context.fetch(request)
-        }catch{
-           print("Failed to fetch context")
-        }
+       
+        LoadItems()
       
     
     }
@@ -95,6 +91,16 @@ class TodoListViewController: UITableViewController {
         present(alert, animated: true, completion: nil)
         
     }
+    
+    func LoadItems(with request: NSFetchRequest<Item> = Item.fetchRequest())
+    {
+        do{
+            itemArray = try context.fetch(request)
+        }catch{
+           print("Failed to fetch context")
+        }
+        tableView.reloadData()
+    }
 }
 
 extension TodoListViewController: UISearchBarDelegate {
@@ -103,12 +109,17 @@ extension TodoListViewController: UISearchBarDelegate {
         let request : NSFetchRequest<Item> = Item.fetchRequest()
         request.predicate = NSPredicate(format: "title CONTAINS[cd] %@", searchBar.text!)
         request.sortDescriptors = [NSSortDescriptor(key: "title", ascending: true)]
-        do{
-            itemArray = try context.fetch(request)
-        }catch{
-            print("Failed to fetch context")
+        LoadItems(with: request)
+    }
+    
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        if searchBar.text! == ""
+        {
+            LoadItems()
+            DispatchQueue.main.async {
+                searchBar.resignFirstResponder()
+            }
         }
-        tableView.reloadData()
     }
 }
 
