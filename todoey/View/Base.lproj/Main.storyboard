@@ -9,7 +9,7 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--Categories-->
+        <!--Todoey-->
         <scene sceneID="v9G-jn-5t4">
             <objects>
                 <tableViewController id="trM-xj-j7b" customClass="CategoryTableViewController" customModule="todoey" customModuleProvider="target" sceneMemberID="viewController">
@@ -28,11 +28,11 @@
                             </tableViewCell>
                         </prototypes>
                         <connections>
-                            <outlet property="dataSource" destination="trM-xj-j7b" id="neB-dY-1fe"/>
-                            <outlet property="delegate" destination="trM-xj-j7b" id="UD6-jh-tK4"/>
+                            <outlet property="dataSource" destination="trM-xj-j7b" id="69A-EV-ASq"/>
+                            <outlet property="delegate" destination="trM-xj-j7b" id="c0D-la-xMc"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="Categories" id="aYX-7I-Tgb">
+                    <navigationItem key="navigationItem" title="Todoey" id="aYX-7I-Tgb">
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="UxH-rF-iL3">
                             <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <connections>
@@ -48,7 +48,7 @@
             </objects>
             <point key="canvasLocation" x="1594" y="115"/>
         </scene>
-        <!--Todoey-->
+        <!--Items-->
         <scene sceneID="J9q-C5-u2D">
             <objects>
                 <tableViewController id="fUI-s0-Dvy" customClass="TodoListViewController" customModule="todoey" customModuleProvider="target" sceneMemberID="viewController">
@@ -79,7 +79,7 @@
                             <outlet property="delegate" destination="fUI-s0-Dvy" id="moy-fe-GVl"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="Todoey" id="yyb-Rx-z2G">
+                    <navigationItem key="navigationItem" title="Items" id="yyb-Rx-z2G">
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="NfI-Fz-jir">
                             <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <connections>
