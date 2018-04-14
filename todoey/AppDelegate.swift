@@ -8,6 +8,7 @@
 
 import UIKit
 import CoreData
+import RealmSwift
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -19,6 +20,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     {
        print(NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).last! as String)
         // user settings are in ../Library/Preferences/ie.infiniteloop.todoey.plist
+        
+        
+        
+        var realm : Realm? = nil
+        do{
+         realm = try Realm()
+        }catch{
+         print("Failed to initialize Realm \(error)")
+        }
+        
+        print(Realm.Configuration.defaultConfiguration.fileURL!)
+        
         return true
     }
 

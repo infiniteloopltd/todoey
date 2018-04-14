@@ -7,13 +7,13 @@
 //
 
 import UIKit
-import CoreData
+import RealmSwift
 
 class CategoryTableViewController: UITableViewController {
 
-    var categoryArray = [Category]()
+    let realm = try! Realm()
     
-    let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+    var categoryArray : Results<Category>? = nil
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -30,11 +30,10 @@ class CategoryTableViewController: UITableViewController {
         
         let action = UIAlertAction(title: "Add Category", style: UIAlertActionStyle.default) { (alertAction) in
             print(alertText.text!)
-            let newCategory = Category(context: self.context)
+            let newCategory = Category()
             newCategory.name = alertText.text!
          
-            self.categoryArray.append(newCategory)
-            self.SaveData()
+            self.Save(category: newCategory)
             
             self.tableView.reloadData()
         }
@@ -63,13 +62,13 @@ class CategoryTableViewController: UITableViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         let destinationVC = segue.destination as! TodoListViewController
         let indexPath = tableView.indexPathForSelectedRow!
-        destinationVC.selectedCategory = categoryArray[indexPath.row]
+        destinationVC.selectedCategory = categoryArray?[indexPath.row];
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "CategoryCell", for: indexPath)
-        let category = categoryArray[indexPath.row];
-        cell.textLabel?.text = category.name
+        let category = categoryArray?[indexPath.row];
+        cell.textLabel?.text = category?.name
         return cell
     }
 
@@ -77,24 +76,23 @@ class CategoryTableViewController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        return categoryArray.count
+        return categoryArray?.count ?? 0
     }
 
     // MARK: - Data manipulation methods
-    func loadCategories(with request: NSFetchRequest<Category> = Category.fetchRequest())
+    func loadCategories()
     {
-        do{
-            categoryArray = try context.fetch(request)
-        }catch{
-            print("Failed to fetch context")
-        }
+         categoryArray = realm.objects(Category.self)
+        
         tableView.reloadData()
     }
     
-    func SaveData()
+    func Save(category: Category)
     {
         do {
-            try context.save()
+            try realm.write {
+                realm.add(category)
+            }
         }
         catch{
             print("Failed to save data")
