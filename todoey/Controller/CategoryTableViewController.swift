@@ -8,9 +8,9 @@
 
 import UIKit
 import RealmSwift
-import SwipeCellKit
 
-class CategoryTableViewController: UITableViewController {
+
+class CategoryTableViewController: BaseTableViewController {
 
     let realm = try! Realm()
     
@@ -21,7 +21,7 @@ class CategoryTableViewController: UITableViewController {
         
         loadCategories()
         
-        tableView.rowHeight = 80
+        
       
     }
 
@@ -69,14 +69,22 @@ class CategoryTableViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "CategoryCell", for: indexPath) as! SwipeTableViewCell
-        cell.delegate = self
+        let cell = super.tableView(tableView, cellForRowAt: indexPath)
         let category = categoryArray?[indexPath.row];
         cell.textLabel?.text = category?.name
         return cell
     }
 
-  
+    override func updateModel(at indexPath: IndexPath) {
+        do {
+            try self.realm.write {
+                self.realm.delete(self.categoryArray![indexPath.row])
+            }
+        }
+        catch{
+            print("Failed to save data")
+        }
+    }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
@@ -102,36 +110,5 @@ class CategoryTableViewController: UITableViewController {
             print("Failed to save data")
         }
     }
-
 }
 
-extension CategoryTableViewController : SwipeTableViewCellDelegate {
-   
-    func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath, for orientation: SwipeActionsOrientation) -> [SwipeAction]? {
-        if orientation != .right
-        {
-            return nil
-        }
-        let deleteAction = SwipeAction(style: .destructive, title: "Delete") { (action, indexPath) in
-             do {
-                try self.realm.write {
-                    self.realm.delete(self.categoryArray![indexPath.row])
-                }
-            }
-            catch{
-                print("Failed to save data")
-            }
-       }
-       deleteAction.image=#imageLiteral(resourceName: "delete")
-       return [deleteAction]
-    }
-    
-    func tableView(_ tableView: UITableView, editActionsOptionsForRowAt indexPath: IndexPath, for orientation: SwipeActionsOrientation) -> SwipeTableOptions {
-        var options = SwipeTableOptions()
-        options.expansionStyle = .destructive
-        return options
-    }
-    
-
-
-}

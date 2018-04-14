@@ -9,7 +9,7 @@
 import UIKit
 import RealmSwift
 
-class TodoListViewController: UITableViewController {
+class TodoListViewController: BaseTableViewController {
 
     let realm = try! Realm()
     
@@ -31,10 +31,21 @@ class TodoListViewController: UITableViewController {
     
     }
     
+    override func updateModel(at indexPath: IndexPath) {
+        do {
+            try self.realm.write {
+                self.realm.delete(self.todoItems![indexPath.row])
+            }
+        }
+        catch{
+            print("Failed to save data")
+        }
+    }
+    
 
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "ToDoItemCell", for: indexPath)
+        let cell = super.tableView(tableView, cellForRowAt: indexPath)
         let item = todoItems?[indexPath.row];
         if item != nil
         {
