@@ -121,10 +121,15 @@ extension CategoryTableViewController : SwipeTableViewCellDelegate {
             catch{
                 print("Failed to save data")
             }
-            self.tableView.reloadData()
        }
        deleteAction.image=#imageLiteral(resourceName: "delete")
        return [deleteAction]
+    }
+    
+    func tableView(_ tableView: UITableView, editActionsOptionsForRowAt indexPath: IndexPath, for orientation: SwipeActionsOrientation) -> SwipeTableOptions {
+        var options = SwipeTableOptions()
+        options.expansionStyle = .destructive
+        return options
     }
     
 
