@@ -16,6 +16,8 @@ class TodoListViewController: BaseTableViewController {
     
     var todoItems : Results<Item>? = nil
     
+    @IBOutlet weak var searchBar: UISearchBar!
+    
     var selectedCategory : Category? {
         didSet{
             LoadItems()
@@ -29,18 +31,29 @@ class TodoListViewController: BaseTableViewController {
         
         print(dataFilePath!)
       
-       
+        searchBar.barTintColor = UIColor(hexString: selectedCategory?.colour ?? FlatSkyBlue().hexValue())
     }
     
     override func viewWillAppear(_ animated: Bool) {
          // This code cannot go into viewDidLoad(), since the navigation controller is nil.
+        let colour = UIColor(hexString: selectedCategory?.colour ?? FlatSkyBlue().hexValue())
+        setNavbarStyle(colour: colour!)
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        setNavbarStyle(colour: UIColor.flatSkyBlue)
+    }
+    
+    func setNavbarStyle(colour : UIColor)
+    {
          if let navbar = navigationController?.navigationBar {
-           navbar.barTintColor = UIColor(hexString: selectedCategory?.colour ?? FlatSkyBlue().hexValue())
+          
+            navbar.barTintColor = colour
+            navbar.tintColor = ContrastColorOf(navbar.barTintColor!, returnFlat: true)
+            navbar.largeTitleTextAttributes = [NSAttributedStringKey.foregroundColor : navbar.tintColor!]
+         
            title = selectedCategory?.name
-           
         }
-       
-        
     }
     
     override func updateModel(at indexPath: IndexPath) {
