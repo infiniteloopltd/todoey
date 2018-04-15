@@ -8,6 +8,7 @@
 
 import UIKit
 import RealmSwift
+import ChameleonFramework
 
 
 class CategoryTableViewController: BaseTableViewController {
@@ -20,8 +21,6 @@ class CategoryTableViewController: BaseTableViewController {
         super.viewDidLoad()
         
         loadCategories()
-        
-        
       
     }
 
@@ -59,10 +58,12 @@ class CategoryTableViewController: BaseTableViewController {
     // MARK: - Table view data source
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        print("performing goToItems segue")
         performSegue(withIdentifier: "goToItems", sender: self)
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        print("setting selectedCategory on destination View Controller")
         let destinationVC = segue.destination as! TodoListViewController
         let indexPath = tableView.indexPathForSelectedRow!
         destinationVC.selectedCategory = categoryArray?[indexPath.row];
@@ -72,6 +73,8 @@ class CategoryTableViewController: BaseTableViewController {
         let cell = super.tableView(tableView, cellForRowAt: indexPath)
         let category = categoryArray?[indexPath.row];
         cell.textLabel?.text = category?.name
+        cell.backgroundColor = UIColor(hexString: category?.colour ?? "000000")
+        cell.textLabel?.textColor = UIColor(contrastingBlackOrWhiteColorOn:cell.backgroundColor!, isFlat:true)
         return cell
     }
 

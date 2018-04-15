@@ -8,6 +8,7 @@
 
 import UIKit
 import RealmSwift
+import ChameleonFramework
 
 class TodoListViewController: BaseTableViewController {
 
@@ -28,7 +29,18 @@ class TodoListViewController: BaseTableViewController {
         
         print(dataFilePath!)
       
+       
+    }
     
+    override func viewWillAppear(_ animated: Bool) {
+         // This code cannot go into viewDidLoad(), since the navigation controller is nil.
+         if let navbar = navigationController?.navigationBar {
+           navbar.barTintColor = UIColor(hexString: selectedCategory?.colour ?? FlatSkyBlue().hexValue())
+           title = selectedCategory?.name
+           
+        }
+       
+        
     }
     
     override func updateModel(at indexPath: IndexPath) {
@@ -51,6 +63,16 @@ class TodoListViewController: BaseTableViewController {
         {
             cell.textLabel?.text = item!.title
             cell.accessoryType = item!.done ? .checkmark : .none
+            
+            var darkenPercentage = CGFloat(10 * indexPath.row)
+            darkenPercentage = darkenPercentage > 100 ? 100 : darkenPercentage
+     
+            var cellColour = UIColor(hexString: selectedCategory?.colour ?? "000000")
+            cellColour = cellColour?.darken(byPercentage: darkenPercentage / 100)
+           
+            cell.backgroundColor = cellColour
+      
+            cell.textLabel?.textColor = UIColor(contrastingBlackOrWhiteColorOn:cellColour!, isFlat:true)
         }
         return cell
     }
